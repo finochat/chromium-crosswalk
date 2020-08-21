@@ -1901,7 +1901,7 @@ group("blink_platform_unittests_data") {
   ]
 }
 
-if (current_cpu == "x86" || current_cpu == "x64") {
+if (current_cpu == "x86" || current_cpu == "x64" || current_cpu == "arm") {
   source_set("blink_x86_avx") {
     sources = blink_platform_avx_files
     configs += [
