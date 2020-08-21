@@ -58,7 +58,7 @@
 #include "services/network/url_request_context_builder_mojo.h"
 
 // TODO(iotto): Hide behind tenta flag
-#include "xwalk/third_party/tenta/crosswalk_extensions/tenta_host_resolver_factory.h"
+//#include "xwalk/third_party/tenta/crosswalk_extensions/tenta_host_resolver_factory.h"
 
 #if defined(OS_ANDROID) && defined(ARCH_CPU_ARMEL)
 #include "crypto/openssl_util.h"
@@ -314,8 +314,8 @@ void NetworkService::Initialize(mojom::NetworkServiceParamsPtr params) {
 
   host_resolver_manager_ = std::make_unique<net::HostResolverManager>(
       net::HostResolver::ManagerOptions(), net_log_);
-//  host_resolver_factory_ = std::make_unique<net::HostResolver::Factory>();
-  host_resolver_factory_ = std::make_unique<tenta::ext::TentaHostResolverFactory>();
+  host_resolver_factory_ = std::make_unique<net::HostResolver::Factory>();
+//  host_resolver_factory_ = std::make_unique<tenta::ext::TentaHostResolverFactory>();
 
   network_usage_accumulator_ = std::make_unique<NetworkUsageAccumulator>();
 
