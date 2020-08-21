@@ -333,7 +333,8 @@ public class ApplicationStatus {
             }
 
             info = sActivityInfo.get(activity);
-            info.setStatus(newState);
+            if (info != null)
+            	info.setStatus(newState);
 
             // Remove before calling listeners so that isEveryActivityDestroyed() returns false when
             // this was the last activity.
@@ -344,6 +345,7 @@ public class ApplicationStatus {
 
             sCurrentApplicationState = determineApplicationStateLocked();
         }
+        if (info == null) return;
 
         // Notify all state observers that are specifically listening to this activity.
         for (ActivityStateListener listener : info.getListeners()) {
