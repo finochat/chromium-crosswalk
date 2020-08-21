@@ -149,9 +149,9 @@
 #endif
 
 // TODO(iotto) : Hide behind a build flag
-#include "xwalk/third_party/tenta/chromium_cache/chromium_cache_backend.h"
-#include "xwalk/third_party/tenta/chromium_cache/chromium_cache_factory.h"
-#include "xwalk/runtime/browser/android/net/xwalk_cookie_store_wrapper.h"
+//#include "xwalk/third_party/tenta/chromium_cache/chromium_cache_backend.h"
+//#include "xwalk/third_party/tenta/chromium_cache/chromium_cache_factory.h"
+//#include "xwalk/runtime/browser/android/net/xwalk_cookie_store_wrapper.h"
 namespace network {
 
 namespace {
@@ -1757,15 +1757,15 @@ URLRequestContextOwner NetworkContext::ApplyContextParamsToBuilder(
 //    session_cleanup_cookie_store =
 //        base::MakeRefCounted<SessionCleanupCookieStore>(sqlite_store);
 //
-//    std::unique_ptr<net::CookieMonster> cookie_store =
-//        std::make_unique<net::CookieMonster>(session_cleanup_cookie_store.get(),
-//                                             net_log);
-//    if (params_->persist_session_cookies)
-//      cookie_store->SetPersistSessionCookies(true);
+    std::unique_ptr<net::CookieMonster> cookie_store =
+        std::make_unique<net::CookieMonster>(session_cleanup_cookie_store.get(),
+                                             net_log);
+    if (params_->persist_session_cookies)
+      cookie_store->SetPersistSessionCookies(true);
 
     // TODO(iotto): continue
-    builder->SetCookieStore(std::make_unique<xwalk::XWalkCookieStoreWrapper>());
-//    builder->SetCookieStore(std::move(cookie_store));
+    //builder->SetCookieStore(std::make_unique<xwalk::XWalkCookieStoreWrapper>());
+    builder->SetCookieStore(std::move(cookie_store));
   } else {
     DCHECK(!params_->restore_old_session_cookies);
     DCHECK(!params_->persist_session_cookies);
@@ -1910,22 +1910,22 @@ URLRequestContextOwner NetworkContext::ApplyContextParamsToBuilder(
   builder->set_http_network_session_params(session_params);
 
   // TODO(iotto): Set cache factory
-//  builder->SetCreateHttpTransactionFactoryCallback(
-//      base::BindOnce([](net::HttpNetworkSession* session)
-//                         -> std::unique_ptr<net::HttpTransactionFactory> {
-//        return std::make_unique<ThrottlingNetworkTransactionFactory>(session);
-//      }));
-
   builder->SetCreateHttpTransactionFactoryCallback(
       base::BindOnce([](net::HttpNetworkSession* session)
                          -> std::unique_ptr<net::HttpTransactionFactory> {
-              std::unique_ptr<tenta::fs::cache::ChromiumCacheFactory> main_backend(
-                  new tenta::fs::cache::ChromiumCacheFactory(nullptr));
-              return base::WrapUnique(
-                  new net::HttpCache(session,
-                      std::move(main_backend),
-                      true /* is_main_cache; set_up_quic_server_info */));
+        return std::make_unique<ThrottlingNetworkTransactionFactory>(session);
       }));
+
+//  builder->SetCreateHttpTransactionFactoryCallback(
+//      base::BindOnce([](net::HttpNetworkSession* session)
+//                         -> std::unique_ptr<net::HttpTransactionFactory> {
+//              std::unique_ptr<tenta::fs::cache::ChromiumCacheFactory> main_backend(
+//                  new tenta::fs::cache::ChromiumCacheFactory(nullptr));
+//              return base::WrapUnique(
+//                  new net::HttpCache(session,
+//                      std::move(main_backend),
+//                      true /* is_main_cache; set_up_quic_server_info */));
+//      }));
 
   // Can't just overwrite the NetworkDelegate because one might have already
   // been set on the |builder| before it was passed to the NetworkContext.
