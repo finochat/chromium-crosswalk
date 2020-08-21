@@ -268,10 +268,10 @@ jumbo_component("network_service") {
       "//crypto",
       "//third_party/boringssl",
       "//xwalk:xwalk_cookies",
-      "//xwalk/third_party/tenta/chromium_cache",
-      "//xwalk/third_party/tenta/crosswalk_extensions:host_resolver",
+#      "//xwalk/third_party/tenta/chromium_cache",
+#      "//xwalk/third_party/tenta/crosswalk_extensions:host_resolver",
     ]
-    configs += [ "//xwalk/third_party/tenta/meta_fs:meta_fs_pub", ]
+#    configs += [ "//xwalk/third_party/tenta/meta_fs:meta_fs_pub", ]
   }
 
   if (is_win) {
